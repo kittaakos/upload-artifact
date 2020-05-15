@@ -3,7 +3,7 @@ description: 'Upload a build artifact that can be used by subsequent workflow st
 author: 'GitHub'
 inputs: 
   name:
-    description: 'Artifact name'
+    description: "Artifact name. If omitted, falls back to 'artifact' name. If empty string, it tries to upload the artifacts with the original file name."
     required: false
   path:
     description: 'A file, directory or wildcard pattern that describes what to upload'

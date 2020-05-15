@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {create, UploadOptions} from '@actions/artifact'
+import {basename} from 'path'
 import {Inputs, getDefaultArtifactName} from './constants'
 import {findFilesToUpload} from './search'
 
@@ -23,12 +24,23 @@ async function run(): Promise<void> {
       const options: UploadOptions = {
         continueOnError: true
       }
-      await artifactClient.uploadArtifact(
-        name || getDefaultArtifactName(),
-        searchResult.filesToUpload,
-        searchResult.rootDirectory,
-        options
-      )
+      if (name === '') {
+        for (const file of searchResult.filesToUpload) {
+          await artifactClient.uploadArtifact(
+            basename(file),
+            [file],
+            searchResult.rootDirectory,
+            options
+          )
+        }
+      } else {
+        await artifactClient.uploadArtifact(
+          name || getDefaultArtifactName(),
+          searchResult.filesToUpload,
+          searchResult.rootDirectory,
+          options
+        )
+      }
 
       core.info('Artifact upload has finished successfully!')
     }

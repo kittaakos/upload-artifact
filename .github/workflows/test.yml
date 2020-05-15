@@ -50,7 +50,7 @@ jobs:
       run: |
         mkdir -p path/to/dir-1
         mkdir -p path/to/dir-2
-        mkdir -p path/to/dir-3    
+        mkdir -p path/to/dir-3
         echo "Lorem ipsum dolor sit amet" > path/to/dir-1/file1.txt
         echo "Hello world from file #2" > path/to/dir-2/file2.txt
         echo "This is a going to be a test for a large enough file that should get compressed with GZip. The @actions/artifact package uses GZip to upload files. This text should have a compression ratio greater than 100% so it should get uploaded using GZip" > path/to/dir-3/gzip.txt
@@ -74,6 +74,13 @@ jobs:
       with:
         name: 'GZip-Artifact'
         path: path/to/dir-3/
+
+    # Upload using a wildcard pattern, as the name is explicitly empty string, the original file names should be used.
+    - name: 'Upload artifact #4'
+      uses: ./
+      with:
+        path: path/**/dir*/
+        name: ''
 
     # Verify artifacts. Switch to download-artifact@v2 once it's out of preview
 
